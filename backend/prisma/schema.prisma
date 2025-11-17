@@ -16,7 +16,7 @@ generator client {
 }
 
 model User {
-  id        String    @id @default(cuid())
+  id         Int     @id @default(autoincrement())
   name      String
   email     String    @unique
   role      Role
@@ -38,10 +38,10 @@ enum Role {
 }
 
 model Project {
-  id          String      @id @default(cuid())
+  id         Int     @id @default(autoincrement())
   name        String
   description String?
-  createdById String
+  createdById Int
   createdBy   User        @relation("ProjectCreatedBy", fields: [createdById], references: [id])
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
@@ -52,20 +52,20 @@ model Project {
 }
 
 model Transaction {
-  id         String   @id @default(cuid())
-  projectId  String
+  id         Int     @id @default(autoincrement())
+  projectId  Int
   project    Project  @relation(fields: [projectId], references: [id])
-  buyerId    String
+  buyerId    Int
   buyer      User     @relation("buyer", fields: [buyerId], references: [id])
-  sellerId   String
+  sellerId   Int
   seller     User     @relation("seller", fields: [sellerId], references: [id])
   amount     Float
   timestamp  DateTime @default(now())
 }
 
 model GroupChat {
-  id         String          @id @default(cuid())
-  projectId  String
+  id         Int     @id @default(autoincrement())
+  projectId  Int
   project    Project         @relation(fields: [projectId], references: [id])
   mlsId      String?         // or propertyId; optional
   createdAt  DateTime        @default(now())
@@ -75,10 +75,10 @@ model GroupChat {
 }
 
 model GroupChatUser {
-  id       String   @id @default(cuid())
-  chatId   String
+  id         Int     @id @default(autoincrement())
+  chatId   Int
   chat     GroupChat @relation(fields: [chatId], references: [id])
-  userId   String
+  userId   Int
   user     User     @relation(fields: [userId], references: [id])
   joinedAt DateTime @default(now())
 
@@ -86,10 +86,10 @@ model GroupChatUser {
 }
 
 model Message {
-  id        String   @id @default(cuid())
-  chatId    String
+  id         Int     @id @default(autoincrement())
+  chatId    Int
   chat      GroupChat @relation(fields: [chatId], references: [id])
-  senderId  String
+  senderId  Int
   sender    User     @relation(fields: [senderId], references: [id])
   content   String
   timestamp DateTime @default(now())

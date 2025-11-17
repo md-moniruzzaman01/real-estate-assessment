@@ -7,6 +7,7 @@ import { GroupChatsModule } from './group-chats/group-chats.module';
 import { MessagesModule } from './messages/messages.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { LoggerMiddleware } from './common/middleware/logger.middleware';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { LoggerMiddleware } from './common/middleware/logger.middleware';
     GroupChatsModule,
     MessagesModule,
     PrismaModule,
+    AuthModule,
   ],
   controllers: [],
   providers: [],
