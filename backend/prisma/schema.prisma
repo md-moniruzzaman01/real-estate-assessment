@@ -1,0 +1,96 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+ provider = "prisma-client-js"
+
+
+}
+
+model User {
+  id        String    @id @default(cuid())
+  name      String
+  email     String    @unique
+  role      Role
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  // relations
+  createdProjects Project[] @relation("ProjectCreatedBy")
+  boughtTransactions Transaction[] @relation("buyer")
+  soldTransactions  Transaction[] @relation("seller")
+  groupChatUsers    GroupChatUser[]
+  messages          Message[]
+}
+
+enum Role {
+  buyer
+  seller
+  realtor
+}
+
+model Project {
+  id          String      @id @default(cuid())
+  name        String
+  description String?
+  createdById String
+  createdBy   User        @relation("ProjectCreatedBy", fields: [createdById], references: [id])
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  // relations
+  transactions Transaction[]
+  groupChats   GroupChat[]
+}
+
+model Transaction {
+  id         String   @id @default(cuid())
+  projectId  String
+  project    Project  @relation(fields: [projectId], references: [id])
+  buyerId    String
+  buyer      User     @relation("buyer", fields: [buyerId], references: [id])
+  sellerId   String
+  seller     User     @relation("seller", fields: [sellerId], references: [id])
+  amount     Float
+  timestamp  DateTime @default(now())
+}
+
+model GroupChat {
+  id         String          @id @default(cuid())
+  projectId  String
+  project    Project         @relation(fields: [projectId], references: [id])
+  mlsId      String?         // or propertyId; optional
+  createdAt  DateTime        @default(now())
+
+  groupChatUsers GroupChatUser[]
+  messages       Message[]
+}
+
+model GroupChatUser {
+  id       String   @id @default(cuid())
+  chatId   String
+  chat     GroupChat @relation(fields: [chatId], references: [id])
+  userId   String
+  user     User     @relation(fields: [userId], references: [id])
+  joinedAt DateTime @default(now())
+
+  @@unique([chatId, userId])
+}
+
+model Message {
+  id        String   @id @default(cuid())
+  chatId    String
+  chat      GroupChat @relation(fields: [chatId], references: [id])
+  senderId  String
+  sender    User     @relation(fields: [senderId], references: [id])
+  content   String
+  timestamp DateTime @default(now())
+}
