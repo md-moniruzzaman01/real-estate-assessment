@@ -4,6 +4,9 @@ export class CreateGroupChatDto {
   @IsInt()
   projectId: number;
 
+  @IsInt()
+  chatId: number;
+
   @IsOptional()
   @IsString()
   mlsId?: string;

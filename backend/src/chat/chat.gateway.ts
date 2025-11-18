@@ -1,18 +1,4 @@
 // chat.gateway.ts
-// import { WebSocketGateway, WebSocketServer, SubscribeMessage, MessageBody } from '@nestjs/websockets';
-// import { Server } from 'socket.io';
-
-// @WebSocketGateway({ cors: true })
-// export class ChatGateway {
-//   @WebSocketServer()
-//   server: Server;
-
-//   @SubscribeMessage('message')
-//   handleMessage(@MessageBody() message: any) {
-//     // Broadcast new message to all clients in the chat room
-//     this.server.to(`chat_${message.chatId}`).emit('newMessage', message);
-//   }
-// }
 
 import {
   WebSocketGateway,

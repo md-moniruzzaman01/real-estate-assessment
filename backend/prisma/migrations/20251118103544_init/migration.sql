@@ -3,10 +3,11 @@ CREATE TYPE "Role" AS ENUM ('buyer', 'seller', 'realtor');
 
 -- CreateTable
 CREATE TABLE "User" (
-    "id" TEXT NOT NULL,
+    "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "role" "Role" NOT NULL,
+    "password" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -15,10 +16,10 @@ CREATE TABLE "User" (
 
 -- CreateTable
 CREATE TABLE "Project" (
-    "id" TEXT NOT NULL,
+    "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
     "description" TEXT,
-    "createdById" TEXT NOT NULL,
+    "createdById" INTEGER NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -27,10 +28,10 @@ CREATE TABLE "Project" (
 
 -- CreateTable
 CREATE TABLE "Transaction" (
-    "id" TEXT NOT NULL,
-    "projectId" TEXT NOT NULL,
-    "buyerId" TEXT NOT NULL,
-    "sellerId" TEXT NOT NULL,
+    "id" SERIAL NOT NULL,
+    "projectId" INTEGER NOT NULL,
+    "buyerId" INTEGER NOT NULL,
+    "sellerId" INTEGER NOT NULL,
     "amount" DOUBLE PRECISION NOT NULL,
     "timestamp" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
@@ -39,8 +40,8 @@ CREATE TABLE "Transaction" (
 
 -- CreateTable
 CREATE TABLE "GroupChat" (
-    "id" TEXT NOT NULL,
-    "projectId" TEXT NOT NULL,
+    "id" SERIAL NOT NULL,
+    "projectId" INTEGER NOT NULL,
     "mlsId" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
@@ -49,9 +50,9 @@ CREATE TABLE "GroupChat" (
 
 -- CreateTable
 CREATE TABLE "GroupChatUser" (
-    "id" TEXT NOT NULL,
-    "chatId" TEXT NOT NULL,
-    "userId" TEXT NOT NULL,
+    "id" SERIAL NOT NULL,
+    "chatId" INTEGER NOT NULL,
+    "userId" INTEGER NOT NULL,
     "joinedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "GroupChatUser_pkey" PRIMARY KEY ("id")
@@ -59,9 +60,9 @@ CREATE TABLE "GroupChatUser" (
 
 -- CreateTable
 CREATE TABLE "Message" (
-    "id" TEXT NOT NULL,
-    "chatId" TEXT NOT NULL,
-    "senderId" TEXT NOT NULL,
+    "id" SERIAL NOT NULL,
+    "chatId" INTEGER NOT NULL,
+    "senderId" INTEGER NOT NULL,
     "content" TEXT NOT NULL,
     "timestamp" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 

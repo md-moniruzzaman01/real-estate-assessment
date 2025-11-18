@@ -8,14 +8,15 @@ import { CreateMessageDto } from 'src/common/dto/message.dto';
 export class MessagesController {
   constructor(private messagesService: MessagesService) {}
 
-  @UseGuards(AuthGuard('jwt'))
+  // @UseGuards(AuthGuard('jwt'))
   @Post()
   create(@Body() dto: CreateMessageDto,@Req() req: AuthenticatedRequest) {
-    const userId = req.user.id;
+    console.log(dto);
+    const userId = 1;
     return this.messagesService.create(dto, userId);
   }
 
-  @UseGuards(AuthGuard('jwt'))
+  // @UseGuards(AuthGuard('jwt'))
   @Get()
   getMessages(
     @Query('chatId') chatId: string,
