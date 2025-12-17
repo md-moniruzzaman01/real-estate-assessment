@@ -10,26 +10,24 @@ datasource db {
 }
 
 generator client {
- provider = "prisma-client-js"
-
-
+  provider = "prisma-client-js"
 }
 
 model User {
-  id         Int     @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
   name      String
-  email     String    @unique
+  email     String   @unique
   role      Role
-  password   String
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   // relations
-  createdProjects Project[] @relation("ProjectCreatedBy")
-  boughtTransactions Transaction[] @relation("buyer")
-  soldTransactions  Transaction[] @relation("seller")
-  groupChatUsers    GroupChatUser[]
-  messages          Message[]
+  createdProjects    Project[]       @relation("ProjectCreatedBy")
+  boughtTransactions Transaction[]   @relation("buyer")
+  soldTransactions   Transaction[]   @relation("seller")
+  groupChatUsers     GroupChatUser[]
+  messages           Message[]
 }
 
 enum Role {
@@ -39,13 +37,13 @@ enum Role {
 }
 
 model Project {
-  id         Int     @id @default(autoincrement())
+  id          Int      @id @default(autoincrement())
   name        String
   description String?
   createdById Int
-  createdBy   User        @relation("ProjectCreatedBy", fields: [createdById], references: [id])
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
+  createdBy   User     @relation("ProjectCreatedBy", fields: [createdById], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
   // relations
   transactions Transaction[]
@@ -53,45 +51,45 @@ model Project {
 }
 
 model Transaction {
-  id         Int     @id @default(autoincrement())
-  projectId  Int
-  project    Project  @relation(fields: [projectId], references: [id])
-  buyerId    Int
-  buyer      User     @relation("buyer", fields: [buyerId], references: [id])
-  sellerId   Int
-  seller     User     @relation("seller", fields: [sellerId], references: [id])
-  amount     Float
-  timestamp  DateTime @default(now())
+  id        Int      @id @default(autoincrement())
+  projectId Int
+  project   Project  @relation(fields: [projectId], references: [id])
+  buyerId   Int
+  buyer     User     @relation("buyer", fields: [buyerId], references: [id])
+  sellerId  Int
+  seller    User     @relation("seller", fields: [sellerId], references: [id])
+  amount    Float
+  timestamp DateTime @default(now())
 }
 
 model GroupChat {
-  id         Int     @id @default(autoincrement())
-  projectId  Int
-  project    Project         @relation(fields: [projectId], references: [id])
-  mlsId      String?         // or propertyId; optional
-  createdAt  DateTime        @default(now())
+  id        Int      @id @default(autoincrement())
+  projectId Int      @unique
+  project   Project  @relation(fields: [projectId], references: [id])
+  mlsId     String? // or propertyId; optional
+  createdAt DateTime @default(now())
 
   groupChatUsers GroupChatUser[]
   messages       Message[]
 }
 
 model GroupChatUser {
-  id         Int     @id @default(autoincrement())
+  id       Int       @id @default(autoincrement())
   chatId   Int
   chat     GroupChat @relation(fields: [chatId], references: [id])
   userId   Int
-  user     User     @relation(fields: [userId], references: [id])
-  joinedAt DateTime @default(now())
+  user     User      @relation(fields: [userId], references: [id])
+  joinedAt DateTime  @default(now())
 
   @@unique([chatId, userId])
 }
 
 model Message {
-  id         Int     @id @default(autoincrement())
+  id        Int       @id @default(autoincrement())
   chatId    Int
   chat      GroupChat @relation(fields: [chatId], references: [id])
   senderId  Int
-  sender    User     @relation(fields: [senderId], references: [id])
+  sender    User      @relation(fields: [senderId], references: [id])
   content   String
-  timestamp DateTime @default(now())
+  timestamp DateTime  @default(now())
 }

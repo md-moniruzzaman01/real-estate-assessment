@@ -7,15 +7,13 @@ export class GroupChatsService {
   constructor(private prisma: PrismaService) {}
 
   // Create a new group chat
-  async create(dto: CreateGroupChatDto, creatorId: number) {
+  async create(dto: CreateGroupChatDto) {
     return this.prisma.groupChat.create({
       data: {
         projectId: dto.projectId,
         mlsId: dto.mlsId,
         groupChatUsers: {
-          create: {
-            userId: creatorId,
-          },
+          create: [{ userId: 1 }, { userId: 2 }],
         },
       },
       include: { groupChatUsers: true, messages: true },

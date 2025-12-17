@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { ChatGateway } from '../chat/chat.gateway';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateMessageDto } from 'src/common/dto/message.dto';
@@ -10,30 +10,43 @@ export class MessagesService {
     private chatGateway: ChatGateway,
   ) {}
 
-async create(dto: CreateMessageDto, senderId: number) {
-  let chat = await this.prisma.groupChat.findUnique({ where: { id: dto.chatId } });
+  // Create a new message in an existing chat
+  async create(dto: CreateMessageDto) {
+    // 1️⃣ Check if chat exists
+    console.log(dto)
+    const chat = await this.prisma.groupChat.findUnique({
+      where: { projectId: dto.projectId },
+    });
 
-  if (!chat) {
-    chat = await this.prisma.groupChat.create({ data: { projectId: 1 } }); // choose proper projectId
-    dto.chatId = chat.id; // use newly created chat
+    if (!chat) {
+      throw new NotFoundException(`Chat with id ${dto.projectId} not found`);
+    }
+
+    // 2️⃣ Create message
+    const message = await this.prisma.message.create({
+      data: {
+        chatId: dto.chatId,
+        senderId: dto.senderId,
+        content: dto.content,
+      },
+      include: { sender: true },
+    });
+
+    // 3️⃣ Emit to WebSocket
+    this.chatGateway.server.to(`chat_${dto.chatId}`).emit('newMessage', message);
+
+    return message;
   }
 
-  const message = await this.prisma.message.create({
-    data: {
-      chatId: dto.chatId,
-      senderId,
-      content: dto.content,
-    },
-    include: { sender: true },
-  });
-
-  this.chatGateway.server.to(`chat_${dto.chatId}`).emit('newMessage', message);
-
-  return message;
-}
-
-
+  // Fetch messages for a chat
   async getMessages(chatId: number, skip = 0, take = 20) {
+    // 1️⃣ Check if chat exists
+    const chat = await this.prisma.groupChat.findUnique({ where: { id: chatId } });
+    if (!chat) {
+      throw new NotFoundException(`Chat with id ${chatId} not found`);
+    }
+
+    // 2️⃣ Return messages
     return this.prisma.message.findMany({
       where: { chatId },
       orderBy: { timestamp: 'asc' },

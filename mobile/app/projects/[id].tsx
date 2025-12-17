@@ -32,9 +32,19 @@ export default function ProjectDetails() {
     };
   }, [id]);
 
-  const openChat = () => {
-    router.push(`/chat/${id}`); // id is the project id
-  };
+  // const openChat = () => {
+  //   router.push(`/chat/${id}`); // id is the project id
+  // };
+
+  const openChat = (userId: number) => {
+  router.push({
+    pathname: "/chat/[chatId]",
+    params: {
+      chatId: id,     // project id used as chatId
+      userId: userId, // 1 or 2
+    },
+  });
+};
 
   if (loading)
     return (
@@ -78,9 +88,22 @@ export default function ProjectDetails() {
       )}
 
       {/* Chat Link */}
-      <View style={styles.chatButton} onTouchEnd={openChat}>
-        <Text style={styles.chatButtonText}>{t("open_chat")}</Text>
-      </View>
+   <View style={styles.chatButtonsContainer}>
+  <View
+    style={[styles.chatButton, styles.userOne]}
+    onTouchEnd={() => openChat(1)}
+  >
+    <Text style={styles.chatButtonText}>Chat as User 1</Text>
+  </View>
+
+  <View
+    style={[styles.chatButton, styles.userTwo]}
+    onTouchEnd={() => openChat(2)}
+  >
+    <Text style={styles.chatButtonText}>Chat as User 2</Text>
+  </View>
+</View>
+
     </ScrollView>
   );
 }
@@ -135,4 +158,20 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     fontSize: 16,
   },
+  chatButtonsContainer: {
+  flexDirection: "row",
+  gap: 12,
+  margin: 16,
+},
+
+userOne: {
+  backgroundColor: "#0066cc",
+  flex: 1,
+},
+
+userTwo: {
+  backgroundColor: "#00a86b",
+  flex: 1,
+},
+
 });

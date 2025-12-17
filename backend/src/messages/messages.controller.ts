@@ -11,9 +11,8 @@ export class MessagesController {
   // @UseGuards(AuthGuard('jwt'))
   @Post()
   create(@Body() dto: CreateMessageDto,@Req() req: AuthenticatedRequest) {
-    console.log(dto);
-    const userId = 1;
-    return this.messagesService.create(dto, userId);
+
+    return this.messagesService.create(dto);
   }
 
   // @UseGuards(AuthGuard('jwt'))

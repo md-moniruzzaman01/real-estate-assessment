@@ -8,4 +8,10 @@ export class CreateMessageDto {
   // Remove senderId from client input; we get it from JWT
   @IsString()
   content: string;
+
+  @IsInt()
+  projectId:number;
+
+  @IsInt()
+  senderId:number
 }

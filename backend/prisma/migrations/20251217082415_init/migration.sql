@@ -73,6 +73,9 @@ CREATE TABLE "Message" (
 CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "GroupChat_projectId_key" ON "GroupChat"("projectId");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "GroupChatUser_chatId_userId_key" ON "GroupChatUser"("chatId", "userId");
 
 -- AddForeignKey

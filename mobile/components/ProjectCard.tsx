@@ -7,7 +7,7 @@ export default function ProjectCard({ project, onPress }: any) {
     <Animated.View
       entering={FadeInUp.duration(400)}
       style={{
-        backgroundColor: "#1e1e1e",
+        backgroundColor: "#b6b3b3ff",
         borderRadius: 16,
         padding: 16,
         marginVertical: 10,
@@ -19,7 +19,7 @@ export default function ProjectCard({ project, onPress }: any) {
       <TouchableOpacity onPress={onPress} activeOpacity={0.9}>
         {/* Real Estate Image */}
         <Image
-          source={{ uri: project.thumbnail || "https://images.unsplash.com/photo-1560185127-6e2fc99f1a4f?auto=format&fit=crop&w=800&q=80" }}
+          source={{ uri: project.thumbnail || "https://images.unsplash.com/photo-1554995207-c18c203602cb?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" }}
           style={{ width: "100%", height: 150, borderRadius: 12, marginBottom: 12 }}
         />
 
@@ -29,17 +29,17 @@ export default function ProjectCard({ project, onPress }: any) {
         </Text>
 
         {/* Description */}
-        <Text style={{ color: "#b3b3b3", fontSize: 14, marginBottom: 8 }}>
+        <Text style={{ color: "white", fontSize: 14, marginBottom: 8 }}>
           {project.description || "No description available"}
         </Text>
 
         {/* Price & Location */}
         <View style={{ flexDirection: "row", justifyContent: "space-between", marginTop: 6 }}>
-          <Text style={{ color: "#b3b3b3", fontSize: 14 }}>
-            ৳ {project.price || "N/A"}
+          <Text style={{ color: "white", fontSize: 14 }}>
+            ৳ {project.id || "N/A"}
           </Text>
-          <Text style={{ color: "#b3b3b3", fontSize: 14 }}>
-            {project.location || "Unknown"}
+          <Text style={{ color: "white", fontSize: 14 }}>
+            {project.location ||"Banani, Dhaka"}
           </Text>
         </View>
       </TouchableOpacity>
